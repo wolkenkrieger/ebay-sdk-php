@@ -125,9 +125,9 @@ class XmlParser
         if (count($nsElement) > 1) {
             array_shift($nsElement);
             return $nsElement[0];
-        } else {
-            return $name;
         }
+
+        return $name;
     }
 
     /**
@@ -212,7 +212,7 @@ class XmlParser
                 case 'double':
                 case 'boolean':
                 case 'DateTime':
-                    continue;
+                    continue 2;
                 default:
                     return $meta->phpType !== '' ? new $phpType() : null;
             }
@@ -232,12 +232,12 @@ class XmlParser
     {
         if ($this->isSimplePhpType($meta)) {
             return $this->getValueToAssignToProperty($meta);
-        } else {
-            if ($this->setByValue($meta)) {
-                $meta->phpObject->value = $this->getValueToAssignToValue($meta);
-            }
-            return $meta->phpObject;
         }
+
+        if ($this->setByValue($meta)) {
+            $meta->phpObject->value = $this->getValueToAssignToValue($meta);
+        }
+        return $meta->phpObject;
     }
 
     /**
@@ -258,7 +258,7 @@ class XmlParser
                 case 'double':
                 case 'boolean':
                 case 'DateTime':
-                    continue;
+                    continue 2;
                 default:
                     return false;
             }
@@ -290,10 +290,9 @@ class XmlParser
 
     /**
      * Returns a value that will be assigned to an object's property.
-     *
      * @param \stdClass $meta The PHP meta data.
-     *
      * @return mixed The value to assign.
+     * @throws \Exception
      */
     private function getValueToAssignToProperty(\stdClass $meta)
     {
@@ -323,19 +322,33 @@ class XmlParser
     {
         if (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\Base64BinaryType', false)) {
             return $meta->strData;
-        } elseif (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\BooleanType', false)) {
+        }
+
+        if (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\BooleanType', false)) {
             return strtolower($meta->strData) === 'true';
-        } elseif (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\DecimalType', false)) {
+        }
+
+        if (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\DecimalType', false)) {
             return is_int(0 + $meta->strData) ? (integer)$meta->strData : (double)$meta->strData;
-        } elseif (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\DoubleType', false)) {
+        }
+
+        if (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\DoubleType', false)) {
             return (double)$meta->strData;
-        } elseif (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\IntegerType', false)) {
+        }
+
+        if (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\IntegerType', false)) {
             return (integer)$meta->strData;
-        } elseif (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\StringType', false)) {
+        }
+
+        if (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\StringType', false)) {
             return $meta->strData;
-        } elseif (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\TokenType', false)) {
+        }
+
+        if (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\TokenType', false)) {
             return $meta->strData;
-        } elseif (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\URIType', false)) {
+        }
+
+        if (is_subclass_of($meta->phpObject, '\DTS\eBaySDK\Types\URIType', false)) {
             return $meta->strData;
         }
 
