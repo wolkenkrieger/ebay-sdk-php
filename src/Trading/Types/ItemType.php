@@ -138,6 +138,7 @@ namespace DTS\eBaySDK\Trading\Types;
  * @property boolean $eBayPlusEligible
  * @property boolean $eMailDeliveryAvailable
  * @property boolean $IsSecureDescription
+ * @property \DTS\eBaySDK\Trading\Types\RegulatoryType $Regulatory
  */
 class ItemType extends \DTS\eBaySDK\Types\BaseType
 {
@@ -900,6 +901,12 @@ class ItemType extends \DTS\eBaySDK\Types\BaseType
             'repeatable' => false,
             'attribute' => false,
             'elementName' => 'IsSecureDescription'
+        ],
+        'Regulatory' => [
+            'type' => 'DTS\eBaySDK\Trading\Types\RegulatoryType',
+            'repeatable' => false,
+            'attribute' => false,
+            'elementName' => 'Regulatory'
         ]
     ];
 
